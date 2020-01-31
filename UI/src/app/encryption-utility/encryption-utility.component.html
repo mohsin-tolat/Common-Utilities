@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-sm-5">
+    <div class="form-group">
+      <label for="plainText">Plain Text:</label>
+      <textarea
+        type="plainText"
+        class="form-control"
+        id="plainText"
+        placeholder="Enter Plain Text"
+        name="plainText"
+        rows="15"
+        [(ngModel)]="plainText"
+      ></textarea>
+    </div>
+  </div>
+  <div class="col-sm-2" style="text-align: center;">
+    <div class="form-group">
+      <label for="action">Action:</label>
+      <br />
+      <button type="button" (click)="encryptText()" class="btn btn-primary">
+        Encrypt
+      </button>
+      <span>&nbsp;</span>
+      <button type="button" (click)="decryptText()" class="btn btn-danger">
+        Decrypt
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="form-group">
+      <label for="encryptedText">Encrypted Text:</label>
+      <textarea
+        type="encryptedText"
+        class="form-control"
+        id="encryptedText"
+        placeholder="Enter Encrypted Text"
+        name="encryptedText"
+        rows="15"
+        [(ngModel)]="encryptedText"
+      ></textarea>
+    </div>
+  </div>
+</div>
