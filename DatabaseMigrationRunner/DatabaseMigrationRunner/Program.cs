@@ -43,7 +43,7 @@ namespace DatabaseMigrationRunner
         // that all resources will be disposed.
         using (var scope = serviceProvider.CreateScope())
         {
-          UpdateDatabase(scope.ServiceProvider, appSettings, options);
+          UpdateDatabase(scope.ServiceProvider, options);
         }
       }
     }
@@ -76,7 +76,7 @@ namespace DatabaseMigrationRunner
     /// <summary>
     /// Update the database
     /// </summary>
-    private static void UpdateDatabase(IServiceProvider serviceProvider, AppSettings appSettings, CommandOptions commandOptions)
+    private static void UpdateDatabase(IServiceProvider serviceProvider, CommandOptions commandOptions)
     {
       // Instantiate the runner
       var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
