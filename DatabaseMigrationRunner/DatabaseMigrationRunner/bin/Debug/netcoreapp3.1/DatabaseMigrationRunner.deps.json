@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "DatabaseMigrationRunner/1.0.0": {
         "dependencies": {
+          "CommandLineParser": "2.7.82",
           "FluentMigrator": "3.2.1",
           "FluentMigrator.Runner": "3.2.1",
           "FluentMigrator.Runner.SqlServer": "3.2.1",
@@ -24,6 +25,14 @@
         },
         "runtime": {
           "DatabaseMigrationRunner.dll": {}
+        }
+      },
+      "CommandLineParser/2.7.82": {
+        "runtime": {
+          "lib/netstandard2.0/CommandLine.dll": {
+            "assemblyVersion": "2.7.82.0",
+            "fileVersion": "2.7.82.0"
+          }
         }
       },
       "FluentMigrator/3.2.1": {
@@ -1159,6 +1168,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "CommandLineParser/2.7.82": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JnjxBu4++EDnYtDzHskiPrPJ9hAna8amu8qlQx8J+2oZnPddDnkR/0FFtQMDz0Cs0YF2lbyW3OmYfRmIrLNY0A==",
+      "path": "commandlineparser/2.7.82",
+      "hashPath": "commandlineparser.2.7.82.nupkg.sha512"
     },
     "FluentMigrator/3.2.1": {
       "type": "package",

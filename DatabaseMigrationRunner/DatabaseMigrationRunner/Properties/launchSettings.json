@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DatabaseMigrationRunner": {
+      "commandName": "Project",
+      "commandLineArgs": "-e Development"
+    }
+  }
+}

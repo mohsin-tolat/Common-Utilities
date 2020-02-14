@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandLine;
 using DatabaseMigrationRunner.Configurations;
 using DatabaseMigrationRunner.Utilities;
 using FluentMigrator.Runner;
@@ -11,17 +12,39 @@ namespace DatabaseMigrationRunner
   {
     public static void Main(string[] args)
     {
-      var appSettings = AppInitializer.BindAndGetAppSettings();
-
-      LoggerUtility.ConfigureSeriLog();
-
-      var serviceProvider = CreateServices(appSettings);
-
-      // Put the database update into a scope to ensure
-      // that all resources will be disposed.
-      using (var scope = serviceProvider.CreateScope())
+      try
       {
-        UpdateDatabase(scope.ServiceProvider);
+        CommandOptions cmdOptions = new CommandOptions();
+        Parser.Default.ParseArguments<CommandOptions>(args).WithParsed(options =>
+        {
+          InitializeApplication(options);
+        });
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"{DateTime.UtcNow} - [ERR] - Error Occurred in migrations");
+        Console.WriteLine(ex?.Message);
+        Console.WriteLine(ex?.InnerException);
+        Console.WriteLine(ex?.StackTrace);
+      }
+    }
+
+    public static void InitializeApplication(CommandOptions options)
+    {
+      if (options.IsValid())
+      {
+        var appSettings = AppInitializer.BindAndGetAppSettings(options.Environment);
+
+        LoggerUtility.ConfigureSeriLog();
+
+        var serviceProvider = CreateServices(appSettings);
+
+        // Put the database update into a scope to ensure
+        // that all resources will be disposed.
+        using (var scope = serviceProvider.CreateScope())
+        {
+          UpdateDatabase(scope.ServiceProvider);
+        }
       }
     }
 
