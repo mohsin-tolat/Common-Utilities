@@ -15,7 +15,6 @@ namespace DatabaseMigrationRunner
     {
       try
       {
-        CommandOptions cmdOptions = new CommandOptions();
         Parser.Default.ParseArguments<CommandOptions>(args).WithParsed(options =>
         {
           InitializeApplication(options);
@@ -44,7 +43,7 @@ namespace DatabaseMigrationRunner
         // that all resources will be disposed.
         using (var scope = serviceProvider.CreateScope())
         {
-          UpdateDatabase(scope.ServiceProvider);
+          UpdateDatabase(scope.ServiceProvider, appSettings, options);
         }
       }
     }
@@ -77,13 +76,54 @@ namespace DatabaseMigrationRunner
     /// <summary>
     /// Update the database
     /// </summary>
-    private static void UpdateDatabase(IServiceProvider serviceProvider)
+    private static void UpdateDatabase(IServiceProvider serviceProvider, AppSettings appSettings, CommandOptions commandOptions)
     {
       // Instantiate the runner
       var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
       // Execute the migrations
-      runner.MigrateUp();
+
+      runner.ListMigrations();
+
+      if (commandOptions.MigrationRunType == MigrationRunType.Down)
+      {
+        if (runner.HasMigrationsToApplyDown(commandOptions.Version.Value))
+        {
+          Log.Debug($"Migrations available to Apply Down Version: {commandOptions.Version.Value}");
+          runner.MigrateDown(commandOptions.Version.Value);
+        }
+        else
+        {
+          Log.Warning($"NO Migrations available to Apply Down to Version: {commandOptions.Version.Value}");
+        }
+      }
+      else
+      {
+        if (commandOptions.Version.HasValue)
+        {
+          if (runner.HasMigrationsToApplyUp(commandOptions.Version.Value))
+          {
+            Log.Debug($"Migrations available to Apply Up to Version: {commandOptions.Version.Value}");
+            runner.MigrateUp(commandOptions.Version.Value);
+          }
+          else
+          {
+            Log.Warning($"NO Migrations available to Apply Up to Version: {commandOptions.Version.Value}");
+          }
+        }
+        else
+        {
+          if (runner.HasMigrationsToApplyUp())
+          {
+            Log.Debug("Migrations available to Apply Up Version: ALL Remaining");
+            runner.MigrateUp();
+          }
+          else
+          {
+            Log.Warning($"NO Migrations available to Apply Up to Version: ALL Remaining");
+          }
+        }
+      }
     }
   }
 }

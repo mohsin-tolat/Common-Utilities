@@ -2,7 +2,7 @@
   "profiles": {
     "DatabaseMigrationRunner": {
       "commandName": "Project",
-      "commandLineArgs": "-e Development"
+      "commandLineArgs": "-e Development -t Up"
     }
   }
 }
