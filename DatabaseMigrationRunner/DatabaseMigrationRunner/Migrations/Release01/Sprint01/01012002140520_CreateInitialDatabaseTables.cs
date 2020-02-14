@@ -4,7 +4,8 @@ using Microsoft.Extensions.Logging;
 
 namespace DatabaseMigrationRunner.Migrations.Release01.Sprint01
 {
-  [CustomDatabaseMigrationRunner(01, 01, 20, 02, 14, 05, 04, "Initial Database Table Scripts", "Mohsin")]
+  [AllEnvironmentTag]
+  [CustomDatabaseMigrationRunner(01, 01, 20, 02, 14, 05, 20, "Initial Database Table Scripts AllEnvironmentTag", "Mohsin")]
   public class _01012002140520_CreateInitialDatabaseTables : AutoReversingMigration
   {
     private readonly ILogger<_01012002140520_CreateInitialDatabaseTables> logger;

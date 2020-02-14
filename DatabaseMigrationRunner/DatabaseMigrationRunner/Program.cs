@@ -3,6 +3,7 @@ using CommandLine;
 using DatabaseMigrationRunner.Configurations;
 using DatabaseMigrationRunner.Utilities;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -37,7 +38,7 @@ namespace DatabaseMigrationRunner
 
         LoggerUtility.ConfigureSeriLog();
 
-        var serviceProvider = CreateServices(appSettings);
+        var serviceProvider = CreateServices(appSettings, options);
 
         // Put the database update into a scope to ensure
         // that all resources will be disposed.
@@ -51,7 +52,7 @@ namespace DatabaseMigrationRunner
     /// <summary>
     /// Configure the dependency injection services
     /// </summary>
-    private static IServiceProvider CreateServices(AppSettings appSettings)
+    private static IServiceProvider CreateServices(AppSettings appSettings, CommandOptions commandOptions)
     {
       return new ServiceCollection()
           // Add common FluentMigrator services
@@ -65,6 +66,10 @@ namespace DatabaseMigrationRunner
               .ScanIn(typeof(Program).Assembly).For.Migrations())
           // Enable logging to console in the FluentMigrator way
           .AddLogging(lb => lb.AddSerilog())
+          .Configure<RunnerOptions>(options =>
+          {
+            options.Tags = new[] { "ALLEnvironment", commandOptions.Environment };
+          })
           // Build the service provider
           .BuildServiceProvider(false);
     }
